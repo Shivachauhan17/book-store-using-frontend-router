@@ -38,17 +38,19 @@ router.get('/',async(request,response)=>{
     }
 })
 
-router.get(':id',async(request,response)=>{
-    try{
-        const {id}=request.params;
-        const books=await Book.findById(id);
-        return response.status(200).json(books);
+router.get('/:id', async (request, response) => {
+    try {
+        console.log()
+      const  {id}  = request.params;
+  
+      const book = await Book.findById(id);
+  
+      return response.status(200).json(book);
+    } catch (error) {
+      console.log(error.message);
+      response.status(500).send({ message: error.message });
     }
-    catch(err){
-        console.log(err.message)
-        response.status(500).send({message:err.message})
-    }
-})
+  });
 
 router.put('/:id',async(request,response)=>{
     try{
@@ -61,7 +63,7 @@ router.put('/:id',async(request,response)=>{
        
        const {id}=request.params;
        
-       const result=Book.findByIdAndUpdate(id,request.body);
+       const result=await Book.findByIdAndUpdate(id,request.body);
        if(!result){
         return response.status(404).json({message:'Book not found'});
        }
